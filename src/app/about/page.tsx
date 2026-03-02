@@ -6,6 +6,9 @@ import { useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const AWARDS = [
     { year: "2024", title: "AIA Excellence in Residential Design", project: "House Aries", status: "Winner" },
@@ -26,6 +29,24 @@ export default function About() {
                 stagger: 0.2,
                 ease: "power3.out",
             });
+
+            // Awards scroll animation (mobile)
+            if (window.matchMedia("(max-width: 1024px)").matches) {
+                gsap.utils.toArray(".award-row").forEach((row: any) => {
+                    gsap.fromTo(row,
+                        { opacity: 0.3 },
+                        {
+                            opacity: 1,
+                            scrollTrigger: {
+                                trigger: row,
+                                start: "top 80%",
+                                end: "top 40%",
+                                scrub: true,
+                            }
+                        }
+                    );
+                });
+            }
         });
         return () => ctx.revert();
     }, []);
@@ -54,7 +75,7 @@ export default function About() {
                                     alt="VARTEX Studio Philosophy"
                                     fill
                                     priority
-                                    className="object-cover grayscale-0 lg:grayscale lg:hover:grayscale-0 transition-all duration-700"
+                                    className="object-cover transition-all duration-700"
                                     sizes="(max-width: 1024px) 100vw, 33vw"
                                 />
 
@@ -116,7 +137,7 @@ export default function About() {
 
                         <div className="flex flex-col">
                             {AWARDS.map((award, i) => (
-                                <div key={i} className="group grid grid-cols-1 md:grid-cols-12 py-8 border-b border-neutral-50 dark:border-white/5 hover:bg-neutral-50 dark:hover:bg-white/[0.02] transition-colors items-center px-4">
+                                <div key={i} className="award-row group grid grid-cols-1 md:grid-cols-12 py-8 border-b border-neutral-50 dark:border-white/5 hover:bg-neutral-50 dark:hover:bg-white/[0.02] transition-colors items-center px-4">
                                     <span className="md:col-span-1 font-mono text-[10px] text-primary/40 dark:text-white/40">{award.year}</span>
                                     <div className="md:col-span-6 flex flex-col">
                                         <h4 className="text-lg font-bold text-primary dark:text-white group-hover:translate-x-2 transition-transform">{award.title}</h4>

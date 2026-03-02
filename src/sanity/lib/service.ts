@@ -1,5 +1,5 @@
 import { client } from './client'
-import { featuredProjectsQuery, allProjectsQuery, projectBySlugQuery, allBlogsQuery, blogBySlugQuery } from './queries'
+import { featuredProjectsQuery, selectedWorksQuery, allProjectsQuery, projectBySlugQuery, allBlogsQuery, blogBySlugQuery } from './queries'
 import { projects as mockProjects } from '@/data/projects'
 // Note: journal mock data isn't in a central file yet, will handle fallback for it too
 
@@ -14,6 +14,20 @@ export async function getFeaturedProjects() {
     } catch (error) {
         console.error('Sanity fetch error:', error)
         return mockProjects.slice(0, 5)
+    }
+}
+
+export async function getSelectedWorks() {
+    if (process.env.NEXT_PUBLIC_SANITY_PROJECT_ID === 'missing' || !process.env.NEXT_PUBLIC_SANITY_PROJECT_ID) {
+        return mockProjects.slice(0, 2)
+    }
+
+    try {
+        const data = await client.fetch(selectedWorksQuery)
+        return data.length > 0 ? data : mockProjects.slice(0, 2)
+    } catch (error) {
+        console.error('Sanity fetch error:', error)
+        return mockProjects.slice(0, 2)
     }
 }
 

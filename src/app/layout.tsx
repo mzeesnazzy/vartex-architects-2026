@@ -20,6 +20,25 @@ const ibmPlexMono = IBM_Plex_Mono({
 export const metadata: Metadata = {
     title: "VARTEX Architects",
     description: "Architecture shaped by idea, context, and precision.",
+    openGraph: {
+        title: "VARTEX Architects",
+        description: "Architecture shaped by idea, context, and precision.",
+        images: [
+            {
+                url: "/og-image.png",
+                width: 1200,
+                height: 630,
+                alt: "VARTEX Architects Logo",
+            },
+        ],
+        type: "website",
+    },
+    twitter: {
+        card: "summary_large_image",
+        title: "VARTEX Architects",
+        description: "Architecture shaped by idea, context, and precision.",
+        images: ["/og-image.png"],
+    },
 };
 
 export default function RootLayout({

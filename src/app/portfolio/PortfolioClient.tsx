@@ -8,7 +8,7 @@ import Image from "next/image";
 import gsap from "gsap";
 import { ArrowRight } from "lucide-react";
 
-const CATEGORIES = ["All", "Residential", "Commercial", "Institutional", "Urban Planning", "Landscape"];
+// Categories are now derived dynamically from the projects data
 
 interface Project {
     id?: string;
@@ -27,11 +27,28 @@ interface PortfolioClientProps {
 
 export default function PortfolioClient({ projects }: PortfolioClientProps) {
     const [filter, setFilter] = useState("All");
+    const [currentPage, setCurrentPage] = useState(1);
     const containerRef = useRef(null);
+    const itemsPerPage = 6;
+
+    const categories = ["All", ...Array.from(new Set(projects.map(p => p.category).filter(Boolean)))];
 
     const filteredProjects = filter === "All"
         ? projects
         : projects.filter(p => p.category === filter);
+
+    const totalPages = Math.ceil(filteredProjects.length / itemsPerPage);
+    const currentProjects = filteredProjects.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
+    const paginate = (pageNumber: number) => {
+        setCurrentPage(pageNumber);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    };
+
+    // Reset pagination when filter changes
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [filter]);
 
     useEffect(() => {
         const ctx = gsap.context(() => {
@@ -63,7 +80,7 @@ export default function PortfolioClient({ projects }: PortfolioClientProps) {
 
                     {/* Filter UI */}
                     <div className="flex flex-wrap justify-center gap-4 lg:gap-8 border-y border-neutral-100 dark:border-white/5 py-4 w-full" role="tablist" aria-label="Project categories">
-                        {CATEGORIES.map((cat) => (
+                        {categories.map((cat) => (
                             <button
                                 key={cat}
                                 onClick={() => setFilter(cat)}
@@ -83,7 +100,7 @@ export default function PortfolioClient({ projects }: PortfolioClientProps) {
 
                 {/* Projects Grid */}
                 <section ref={containerRef} className="px-8 lg:px-24 py-24 grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-24" aria-label="Project grid">
-                    {filteredProjects.map((project, index) => (
+                    {currentProjects.map((project, index) => (
                         <Link
                             href={`/project/${project.id || project.slug}`}
                             key={project.id || project.slug}
@@ -128,11 +145,25 @@ export default function PortfolioClient({ projects }: PortfolioClientProps) {
                     ))}
                 </section>
 
-                {/* Tech Metadata Footer */}
-                <section className="px-8 lg:px-24 py-12 flex justify-between border-t border-neutral-100 dark:border-white/5 font-mono text-[10px] text-primary/40 dark:text-white/40 uppercase tracking-[0.2em]">
-                    <span>STATUS: ALL SYSTEMS OPERATIONAL</span>
-                    <span>COORDINATES: 6.5244° N, 3.3792° E</span>
-                </section>
+                {/* Pagination Controls */}
+                {totalPages > 1 && (
+                    <section className="px-8 lg:px-24 pb-24 flex justify-center gap-2">
+                        {Array.from({ length: totalPages }).map((_, i) => (
+                            <button
+                                key={i}
+                                onClick={() => paginate(i + 1)}
+                                className={`w-8 h-8 rounded-full font-mono text-xs transition-colors duration-300 ${currentPage === i + 1
+                                    ? "bg-primary text-white dark:bg-white dark:text-primary"
+                                    : "bg-neutral-100 text-primary dark:bg-neutral-800 dark:text-white hover:bg-neutral-200 dark:hover:bg-neutral-700"
+                                    }`}
+                            >
+                                {i + 1}
+                            </button>
+                        ))}
+                    </section>
+                )}
+
+
             </main>
 
             <Footer />

@@ -138,7 +138,7 @@ export default function Contact() {
                                 <div className="flex flex-col gap-2 relative">
                                     <label htmlFor="project-type" className="font-mono text-[9px] tracking-[0.2em] text-primary/40 dark:text-white/40 uppercase">PROJECT TYPE</label>
                                     <select id="project-type" name="type" className="bg-transparent border-b border-neutral-300 dark:border-white/10 py-4 focus:border-primary dark:focus:border-white outline-none transition-colors text-xl font-light text-primary dark:text-white appearance-none cursor-pointer">
-                                        <option value="residential" className="bg-white dark:bg-neutral-900 text-primary dark:text-white">Residential</option>
+                                        <option value="architectural" className="bg-white dark:bg-neutral-900 text-primary dark:text-white">Architectural</option>
                                         <option value="commercial" className="bg-white dark:bg-neutral-900 text-primary dark:text-white">Commercial</option>
                                         <option value="urban" className="bg-white dark:bg-neutral-900 text-primary dark:text-white">Urban Planning</option>
                                         <option value="interior" className="bg-white dark:bg-neutral-900 text-primary dark:text-white">Interior</option>

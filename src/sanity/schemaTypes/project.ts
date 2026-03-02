@@ -34,21 +34,20 @@ export default {
             title: 'Featured on Homepage',
             description: 'If toggled, this project will appear in the home page hero carousel.',
             type: 'boolean',
-            initialValue: true,
+            initialValue: false,
+        },
+        {
+            name: 'selectedWork',
+            title: 'Show in Selected Works',
+            description: 'If toggled, this project will appear in the "Selected Works" section on the homepage. Pick exactly 2 projects.',
+            type: 'boolean',
+            initialValue: false,
         },
         {
             name: 'category',
             title: 'Category',
+            description: 'Type any category (e.g., Residential, Commercial, Institutional, Urban Planning, Landscape, or any custom category).',
             type: 'string',
-            options: {
-                list: [
-                    { title: 'Residential', value: 'Residential' },
-                    { title: 'Commercial', value: 'Commercial' },
-                    { title: 'Institutional', value: 'Institutional' },
-                    { title: 'Urban Planning', value: 'Urban' },
-                    { title: 'Landscape', value: 'Landscape' },
-                ],
-            },
         },
         {
             name: 'client',
@@ -117,6 +116,36 @@ export default {
             title: 'Project Description',
             type: 'text',
             rows: 5,
+        },
+        {
+            name: 'specs',
+            title: 'Technical Specifications',
+            description: 'Add technical specs like Structure, Glazing, Landscape, etc.',
+            type: 'array',
+            group: 'specs',
+            of: [
+                {
+                    type: 'object',
+                    fields: [
+                        {
+                            name: 'label',
+                            title: 'Label',
+                            type: 'string',
+                        },
+                        {
+                            name: 'value',
+                            title: 'Value',
+                            type: 'string',
+                        },
+                    ],
+                    preview: {
+                        select: {
+                            title: 'label',
+                            subtitle: 'value',
+                        },
+                    },
+                },
+            ],
         },
     ],
     preview: {

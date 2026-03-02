@@ -31,6 +31,8 @@ interface JournalClientProps {
 export default function JournalClient({ initialPosts }: JournalClientProps) {
     const mainRef = useRef(null);
     const [activeCategory, setActiveCategory] = useState("All");
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 6;
 
     const categories = ["All", ...Array.from(new Set(initialPosts.map(p => p.category).filter(Boolean)))];
 
@@ -38,10 +40,23 @@ export default function JournalClient({ initialPosts }: JournalClientProps) {
         ? initialPosts
         : initialPosts.filter(p => p.category === activeCategory);
 
-    const featuredPost = initialPosts.find(p => p.featured);
+    const featuredPost = initialPosts.find(p => p.featured) || initialPosts[0];
     const regularPosts = filteredPosts.filter(p =>
         (p.id || p.slug) !== (featuredPost?.id || featuredPost?.slug) || activeCategory !== "All"
     );
+
+    const totalPages = Math.ceil(regularPosts.length / itemsPerPage);
+    const currentPosts = regularPosts.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
+    const paginate = (pageNumber: number) => {
+        setCurrentPage(pageNumber);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    };
+
+    // Reset pagination when filter changes
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [activeCategory]);
 
     useEffect(() => {
         const ctx = gsap.context(() => {
@@ -89,7 +104,7 @@ export default function JournalClient({ initialPosts }: JournalClientProps) {
                     <span className="font-mono text-[10px] tracking-[0.4em] text-primary/40 dark:text-white/40 uppercase">
                         Reflections — Discourse — Process
                     </span>
-                    <h1 className="text-5xl lg:text-8xl font-black uppercase tracking-tighter leading-none text-primary dark:text-white mt-4">
+                    <h1 className="text-5xl lg:text-9xl font-black uppercase tracking-tighter leading-none text-primary dark:text-white mt-4">
                         JOURNAL.
                     </h1>
                     <p className="text-lg font-light text-primary/60 dark:text-white/60 max-w-xl mt-6 leading-relaxed">
@@ -152,11 +167,11 @@ export default function JournalClient({ initialPosts }: JournalClientProps) {
                                     </span>
                                 </div>
 
-                                <h2 className="text-3xl lg:text-4xl font-black tracking-tight leading-tight text-primary dark:text-white group-hover:text-primary/80 dark:group-hover:text-white/80 transition-colors duration-300">
+                                <h2 className="text-3xl lg:text-5xl font-black tracking-tight leading-tight text-primary dark:text-white group-hover:text-primary/80 dark:group-hover:text-white/80 transition-colors duration-300">
                                     {featuredPost.title}
                                 </h2>
 
-                                <p className="text-primary/60 dark:text-white/60 font-light leading-relaxed line-clamp-3">
+                                <p className="text-primary/70 dark:text-white/70 font-normal text-lg lg:text-xl leading-relaxed line-clamp-3">
                                     {featuredPost.excerpt || "Dive into our latest discourse on contemporary architectural practice."}
                                 </p>
 
@@ -177,7 +192,7 @@ export default function JournalClient({ initialPosts }: JournalClientProps) {
                 {/* Posts Grid */}
                 <section className="px-8 lg:px-24 py-16 lg:py-24">
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12">
-                        {regularPosts.map((post) => (
+                        {currentPosts.map((post) => (
                             <Link
                                 key={post.id || post.slug}
                                 href={`/journal/${post.id || post.slug}`}
@@ -210,12 +225,12 @@ export default function JournalClient({ initialPosts }: JournalClientProps) {
                                 </div>
 
                                 {/* Title */}
-                                <h3 className="text-xl lg:text-2xl font-bold tracking-tight leading-tight text-primary dark:text-white group-hover:text-primary/80 dark:group-hover:text-white/80 transition-colors duration-300 mb-3">
+                                <h3 className="text-xl lg:text-3xl font-black tracking-tight leading-tight text-primary dark:text-white group-hover:text-primary/80 dark:group-hover:text-white/80 transition-colors duration-300 mb-3">
                                     {post.title}
                                 </h3>
 
                                 {/* Excerpt */}
-                                <p className="text-sm text-primary/50 dark:text-white/50 font-light leading-relaxed flex-grow mb-6 line-clamp-3">
+                                <p className="text-sm lg:text-base text-primary/70 dark:text-white/70 font-normal leading-relaxed flex-grow mb-6 line-clamp-3">
                                     {post.excerpt || "Exploring the intersection of tradition and modern design language."}
                                 </p>
 
@@ -233,6 +248,24 @@ export default function JournalClient({ initialPosts }: JournalClientProps) {
                         ))}
                     </div>
                 </section>
+
+                {/* Pagination Controls */}
+                {totalPages > 1 && (
+                    <section className="px-8 lg:px-24 pb-24 flex justify-center gap-2">
+                        {Array.from({ length: totalPages }).map((_, i) => (
+                            <button
+                                key={i}
+                                onClick={() => paginate(i + 1)}
+                                className={`w-8 h-8 rounded-full font-mono text-xs transition-colors duration-300 ${currentPage === i + 1
+                                    ? "bg-primary text-white dark:bg-white dark:text-primary"
+                                    : "bg-neutral-100 text-primary dark:bg-neutral-800 dark:text-white hover:bg-neutral-200 dark:hover:bg-neutral-700"
+                                    }`}
+                            >
+                                {i + 1}
+                            </button>
+                        ))}
+                    </section>
+                )}
 
             </main>
 

@@ -7,7 +7,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Home as HomeIcon, Building2, PenTool, TreePine, ArrowUpRight, ChevronLeft, ChevronRight } from "lucide-react";
+import { Home as HomeIcon, Building2, Sofa, Trees, ArrowUpRight, ChevronLeft, ChevronRight } from "lucide-react";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -24,10 +24,11 @@ interface Project {
 
 interface HomeClientProps {
     featuredProjects: Project[];
+    selectedWorks: Project[];
     allProjects: Project[];
 }
 
-export default function HomeClient({ featuredProjects, allProjects }: HomeClientProps) {
+export default function HomeClient({ featuredProjects, selectedWorks, allProjects }: HomeClientProps) {
     const mainRef = useRef(null);
 
     const [currentSlide, setCurrentSlide] = useState(0);
@@ -80,6 +81,61 @@ export default function HomeClient({ featuredProjects, allProjects }: HomeClient
                 const stepTime = i / (dots.length - 1);
                 processTl.to(fills[i], { scale: 1, duration: 0.1 }, stepTime);
                 processTl.to(dot, { borderColor: "currentColor", duration: 0.1 }, stepTime);
+            });
+
+            // Mobile Scroll Animations
+            if (window.matchMedia("(max-width: 1024px)").matches) {
+                gsap.utils.toArray(".service-card").forEach((card: any) => {
+                    const icon = card.querySelector(".icon-layer");
+                    const title = card.querySelector(".title-layer");
+                    const text = card.querySelector(".text-layer");
+
+                    ScrollTrigger.create({
+                        trigger: card,
+                        start: "top 70%",
+                        end: "bottom 30%",
+                        onEnter: () => {
+                            if (icon) { icon.classList.add("text-primary", "dark:text-white"); icon.classList.remove("text-primary/20", "dark:text-white/20"); }
+                            if (title) { title.classList.add("text-primary", "dark:text-white"); }
+                            if (text) { text.classList.add("text-primary/100", "dark:text-white/100"); text.classList.remove("text-primary/60", "dark:text-white/60"); }
+                        },
+                        onLeave: () => {
+                            if (icon) { icon.classList.remove("text-primary", "dark:text-white"); icon.classList.add("text-primary/20", "dark:text-white/20"); }
+                            if (title) { title.classList.remove("text-primary", "dark:text-white"); }
+                            if (text) { text.classList.remove("text-primary/100", "dark:text-white/100"); text.classList.add("text-primary/60", "dark:text-white/60"); }
+                        },
+                        onEnterBack: () => {
+                            if (icon) { icon.classList.add("text-primary", "dark:text-white"); icon.classList.remove("text-primary/20", "dark:text-white/20"); }
+                            if (title) { title.classList.add("text-primary", "dark:text-white"); }
+                            if (text) { text.classList.add("text-primary/100", "dark:text-white/100"); text.classList.remove("text-primary/60", "dark:text-white/60"); }
+                        },
+                        onLeaveBack: () => {
+                            if (icon) { icon.classList.remove("text-primary", "dark:text-white"); icon.classList.add("text-primary/20", "dark:text-white/20"); }
+                            if (title) { title.classList.remove("text-primary", "dark:text-white"); }
+                            if (text) { text.classList.remove("text-primary/100", "dark:text-white/100"); text.classList.add("text-primary/60", "dark:text-white/60"); }
+                        }
+                    });
+                });
+            }
+
+            // Process step number light-up on scroll (desktop + mobile)
+            gsap.utils.toArray(".process-step").forEach((step: any) => {
+                const stepNum = step.querySelector(".step-number");
+                if (stepNum) {
+                    gsap.fromTo(stepNum,
+                        { opacity: 0.3 },
+                        {
+                            opacity: 1,
+                            color: 'currentColor',
+                            scrollTrigger: {
+                                trigger: step,
+                                start: "top 75%",
+                                end: "top 40%",
+                                scrub: true,
+                            }
+                        }
+                    );
+                }
             });
         }, mainRef);
 
@@ -184,7 +240,7 @@ export default function HomeClient({ featuredProjects, allProjects }: HomeClient
                             <Link
                                 href={`/project/${activeProject.id || activeProject.slug}`}
                                 onClick={(e) => e.stopPropagation()}
-                                className="absolute bottom-6 left-6 md:bottom-10 md:left-10 p-6 md:p-8 backdrop-blur-xl border border-white/40 dark:border-white/20 rounded-2xl shadow-2xl flex flex-col gap-2 min-w-[200px] md:min-w-[280px] overflow-hidden z-20 group/tag transition-all hover:scale-[1.02]"
+                                className="absolute bottom-4 left-4 md:bottom-10 md:left-10 p-4 md:p-8 backdrop-blur-xl border border-white/40 dark:border-white/20 rounded-xl md:rounded-2xl shadow-2xl flex flex-col gap-1 md:gap-2 min-w-[160px] md:min-w-[280px] overflow-hidden z-20 group/tag transition-all hover:scale-[1.02]"
                                 style={{
                                     background: currentSlide === 1
                                         ? 'linear-gradient(135deg, rgba(30,30,35,0.4) 0%, rgba(10,10,15,0.2) 100%)'
@@ -206,7 +262,7 @@ export default function HomeClient({ featuredProjects, allProjects }: HomeClient
                                     <ArrowUpRight className="w-4 h-4 text-white/60 group-hover/tag:text-white transition-colors" />
                                 </div>
 
-                                <h3 className="text-xl md:text-2xl font-black tracking-tight text-white relative z-10 drop-shadow-md">
+                                <h3 className="text-lg md:text-2xl font-black tracking-tight text-white relative z-10 drop-shadow-md">
                                     {activeProject.title}
                                 </h3>
                                 <p className="font-mono text-[9px] tracking-widest text-white/70 uppercase relative z-10 drop-shadow-sm font-semibold">
@@ -241,7 +297,7 @@ export default function HomeClient({ featuredProjects, allProjects }: HomeClient
                     </div>
 
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-24">
-                        {allProjects.map((project) => (
+                        {selectedWorks.slice(0, 2).map((project) => (
                             <Link key={project.id || project.slug} href={`/project/${project.id || project.slug}`} aria-label={`View ${project.title} project details`} className="group flex flex-col gap-10 fade-in">
                                 <div className="relative aspect-[16/10] overflow-hidden bg-neutral-100 dark:bg-neutral-900 rounded-sm">
                                     <Image
@@ -281,38 +337,38 @@ export default function HomeClient({ featuredProjects, allProjects }: HomeClient
                 <section className="px-8 lg:px-24 py-24 lg:py-40 bg-neutral-50 dark:bg-neutral-900/10 border-y border-neutral-100 dark:border-white/5" aria-label="Core architectural specializations">
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px bg-neutral-200 dark:bg-neutral-800">
                         {/* Item 1 */}
-                        <div className="bg-white dark:bg-background-dark p-12 flex flex-col gap-8 group">
-                            <HomeIcon className="w-10 h-10 text-primary/20 dark:text-white/20 group-hover:text-primary dark:group-hover:text-white transition-colors duration-500" />
+                        <div className="bg-white dark:bg-background-dark p-12 flex flex-col gap-8 group service-card">
+                            <HomeIcon className="w-10 h-10 text-primary/20 dark:text-white/20 group-hover:text-primary dark:group-hover:text-white transition-colors duration-500 icon-layer" />
                             <div className="flex flex-col gap-4">
-                                <h4 className="text-xl font-bold uppercase tracking-tight text-primary dark:text-white">Residential Design</h4>
-                                <p className="text-xs text-primary/60 dark:text-white/60 leading-relaxed italic">Crafting intimate spaces that balance privacy with openness to nature.</p>
+                                <h4 className="text-xl font-bold uppercase tracking-tight text-primary dark:text-white transition-colors duration-500 title-layer">Architectural Design</h4>
+                                <p className="text-xs text-primary/60 dark:text-white/60 leading-relaxed italic transition-colors duration-500 text-layer">Crafting spaces that balance structural integrity with openness to nature.</p>
                             </div>
                             <span className="font-mono text-[9px] text-primary/20 dark:text-white/20">01</span>
                         </div>
                         {/* Item 2 */}
-                        <div className="bg-white dark:bg-background-dark p-12 flex flex-col gap-8 group">
-                            <Building2 className="w-10 h-10 text-primary/20 dark:text-white/20 group-hover:text-primary dark:group-hover:text-white transition-colors duration-500" />
+                        <div className="bg-white dark:bg-background-dark p-12 flex flex-col gap-8 group service-card">
+                            <Building2 className="w-10 h-10 text-primary/20 dark:text-white/20 group-hover:text-primary dark:group-hover:text-white transition-colors duration-500 icon-layer" />
                             <div className="flex flex-col gap-4">
-                                <h4 className="text-xl font-bold uppercase tracking-tight text-primary dark:text-white">Urban Planning</h4>
-                                <p className="text-xs text-primary/60 dark:text-white/60 leading-relaxed italic">Integrating structures into the city fabric with social and spatial awareness.</p>
+                                <h4 className="text-xl font-bold uppercase tracking-tight text-primary dark:text-white transition-colors duration-500 title-layer">Urban Planning</h4>
+                                <p className="text-xs text-primary/60 dark:text-white/60 leading-relaxed italic transition-colors duration-500 text-layer">Integrating structures into the city fabric with social and spatial awareness.</p>
                             </div>
                             <span className="font-mono text-[9px] text-primary/20 dark:text-white/20">02</span>
                         </div>
                         {/* Item 3 */}
-                        <div className="bg-white dark:bg-background-dark p-12 flex flex-col gap-8 group">
-                            <PenTool className="w-10 h-10 text-primary/20 dark:text-white/20 group-hover:text-primary dark:group-hover:text-white transition-colors duration-500" />
+                        <div className="bg-white dark:bg-background-dark p-12 flex flex-col gap-8 group service-card">
+                            <Sofa className="w-10 h-10 text-primary/20 dark:text-white/20 group-hover:text-primary dark:group-hover:text-white transition-colors duration-500 icon-layer" />
                             <div className="flex flex-col gap-4">
-                                <h4 className="text-xl font-bold uppercase tracking-tight text-primary dark:text-white">Interior Arch</h4>
-                                <p className="text-xs text-primary/60 dark:text-white/60 leading-relaxed italic">Holistic design where the interior shell informs the interior experience.</p>
+                                <h4 className="text-xl font-bold uppercase tracking-tight text-primary dark:text-white transition-colors duration-500 title-layer">Interior Architecture</h4>
+                                <p className="text-xs text-primary/60 dark:text-white/60 leading-relaxed italic transition-colors duration-500 text-layer">Curating the inner volume through materiality, light, and proportion.</p>
                             </div>
                             <span className="font-mono text-[9px] text-primary/20 dark:text-white/20">03</span>
                         </div>
                         {/* Item 4 */}
-                        <div className="bg-white dark:bg-background-dark p-12 flex flex-col gap-8 group">
-                            <TreePine className="w-10 h-10 text-primary/20 dark:text-white/20 group-hover:text-primary dark:group-hover:text-white transition-colors duration-500" />
+                        <div className="bg-white dark:bg-background-dark p-12 flex flex-col gap-8 group service-card">
+                            <Trees className="w-10 h-10 text-primary/20 dark:text-white/20 group-hover:text-primary dark:group-hover:text-white transition-colors duration-500 icon-layer" />
                             <div className="flex flex-col gap-4">
-                                <h4 className="text-xl font-bold uppercase tracking-tight text-primary dark:text-white">Landscape</h4>
-                                <p className="text-xs text-primary/60 dark:text-white/60 leading-relaxed italic">Blurring the boundaries between the built environment and the natural world.</p>
+                                <h4 className="text-xl font-bold uppercase tracking-tight text-primary dark:text-white transition-colors duration-500 title-layer">Landscape</h4>
+                                <p className="text-xs text-primary/60 dark:text-white/60 leading-relaxed italic transition-colors duration-500 text-layer">Blurring the boundary between the built form and its organic surroundings.</p>
                             </div>
                             <span className="font-mono text-[9px] text-primary/20 dark:text-white/20">04</span>
                         </div>
@@ -338,12 +394,12 @@ export default function HomeClient({ featuredProjects, allProjects }: HomeClient
                         <div className="absolute top-4 left-0 w-full h-[1px] bg-primary dark:bg-white hidden md:block origin-left scale-x-0 progress-line"></div>
 
                         {/* Step 01 */}
-                        <div className="flex flex-col gap-8 relative">
+                        <div className="flex flex-col gap-8 relative process-step">
                             <div className="w-8 h-8 rounded-full border-2 border-primary dark:border-white bg-white dark:bg-background-dark flex items-center justify-center z-10 process-dot overflow-hidden">
                                 <div className="w-full h-full bg-primary dark:bg-white scale-0 dot-fill"></div>
                             </div>
                             <div className="flex flex-col gap-4">
-                                <span className="font-mono text-[10px] tracking-widest text-primary/40 dark:text-white/40 uppercase">STEP 01</span>
+                                <span className="font-mono text-[10px] tracking-widest text-primary/40 dark:text-white/40 uppercase step-number">STEP 01</span>
                                 <h4 className="text-2xl font-bold tracking-tight text-primary dark:text-white">Conception</h4>
                                 <p className="text-sm text-primary/60 dark:text-white/60 leading-relaxed max-w-xs italic">
                                     We begin by understanding the site's unique constraints and the client's vision, sketching initial frames that respect the context.
@@ -352,12 +408,12 @@ export default function HomeClient({ featuredProjects, allProjects }: HomeClient
                         </div>
 
                         {/* Step 02 */}
-                        <div className="flex flex-col gap-8 relative">
+                        <div className="flex flex-col gap-8 relative process-step">
                             <div className="w-8 h-8 rounded-full border-2 border-neutral-200 dark:border-white/10 bg-white dark:bg-background-dark flex items-center justify-center z-10 process-dot overflow-hidden">
                                 <div className="w-full h-full bg-primary dark:bg-white scale-0 dot-fill"></div>
                             </div>
                             <div className="flex flex-col gap-4">
-                                <span className="font-mono text-[10px] tracking-widest text-primary/40 dark:text-white/40 uppercase">STEP 02</span>
+                                <span className="font-mono text-[10px] tracking-widest text-primary/40 dark:text-white/40 uppercase step-number">STEP 02</span>
                                 <h4 className="text-2xl font-bold tracking-tight text-primary dark:text-white">Schematic Design</h4>
                                 <p className="text-sm text-primary/60 dark:text-white/60 leading-relaxed max-w-xs italic">
                                     Translating sketches into rigorous technical drawings and 3D models, refining materials, light, and structural integrity.
@@ -366,12 +422,12 @@ export default function HomeClient({ featuredProjects, allProjects }: HomeClient
                         </div>
 
                         {/* Step 03 */}
-                        <div className="flex flex-col gap-8 relative">
+                        <div className="flex flex-col gap-8 relative process-step">
                             <div className="w-8 h-8 rounded-full border-2 border-neutral-200 dark:border-white/10 bg-white dark:bg-background-dark flex items-center justify-center z-10 process-dot overflow-hidden">
                                 <div className="w-full h-full bg-primary dark:bg-white scale-0 dot-fill"></div>
                             </div>
                             <div className="flex flex-col gap-4">
-                                <span className="font-mono text-[10px] tracking-widest text-primary/40 dark:text-white/40 uppercase">STEP 03</span>
+                                <span className="font-mono text-[10px] tracking-widest text-primary/40 dark:text-white/40 uppercase step-number">STEP 03</span>
                                 <h4 className="text-2xl font-bold tracking-tight text-primary dark:text-white">Realization</h4>
                                 <p className="text-sm text-primary/60 dark:text-white/60 leading-relaxed max-w-xs italic">
                                     Overseeing construction with obsessive attention to detail, ensuring the final built form matches the purity of the original idea.

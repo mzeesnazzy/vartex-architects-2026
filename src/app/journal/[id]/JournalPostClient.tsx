@@ -110,7 +110,7 @@ export default function JournalPostClient({ post, relatedPosts, prevPost, nextPo
                                 </div>
                             </div>
                             <h1
-                                className="text-3xl lg:text-5xl xl:text-6xl font-black tracking-tight leading-[1.05] text-white"
+                                className="text-3xl lg:text-5xl xl:text-7xl font-black tracking-tight leading-[1.05] text-white"
                                 style={{ textShadow: '0 2px 8px rgba(0,0,0,0.4)' }}
                             >
                                 {post.title}
@@ -137,22 +137,22 @@ export default function JournalPostClient({ post, relatedPosts, prevPost, nextPo
 
                         {/* Lead paragraph / excerpt */}
                         {post.excerpt && (
-                            <p className="text-xl lg:text-2xl font-light leading-relaxed text-primary/80 dark:text-white/80 mb-12 content-para">
+                            <p className="text-xl lg:text-3xl font-normal leading-relaxed text-primary/80 dark:text-white/80 mb-12 content-para">
                                 {post.excerpt}
                             </p>
                         )}
 
                         {/* Body content (Portable Text for Sanity, Array for legacy) */}
-                        <div className="prose prose-lg dark:prose-invert max-w-none">
+                        <div className="prose prose-xl lg:prose-2xl dark:prose-invert max-w-none">
                             {post.body ? (
-                                <div className="text-primary/70 dark:text-white/65">
+                                <div className="text-primary/80 dark:text-white/75 font-normal leading-relaxed">
                                     <PortableText value={post.body} />
                                 </div>
                             ) : (
                                 post.content?.map((paragraph, i) => (
                                     <p
                                         key={i}
-                                        className="text-base lg:text-lg leading-[1.9] text-primary/70 dark:text-white/65 mb-8 content-para"
+                                        className="text-lg lg:text-xl leading-[1.8] text-primary/80 dark:text-white/75 font-normal mb-10 content-para"
                                     >
                                         {paragraph}
                                     </p>
@@ -199,12 +199,12 @@ export default function JournalPostClient({ post, relatedPosts, prevPost, nextPo
                 {relatedPosts.length > 0 && (
                     <section className="px-8 lg:px-24 py-16 lg:py-24 border-t border-neutral-100 dark:border-white/5">
                         <h3 className="font-mono text-[10px] tracking-[0.4em] text-primary/40 dark:text-white/40 uppercase mb-12">Related Articles</h3>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
-                            {relatedPosts.map(related => (
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12">
+                            {relatedPosts.slice(0, 3).map((related, index) => (
                                 <Link
                                     key={related.id || related.slug}
                                     href={`/journal/${related.id || related.slug}`}
-                                    className="group flex flex-col"
+                                    className={`group flex-col ${index === 2 ? 'hidden lg:flex' : 'flex'}`}
                                 >
                                     <div className="relative aspect-[3/2] overflow-hidden mb-6">
                                         <Image

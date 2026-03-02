@@ -7,7 +7,7 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { ArrowRight, ArrowUpRight } from "lucide-react";
+import { ArrowRight, ArrowUpRight, ArrowLeft } from "lucide-react";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -97,9 +97,16 @@ export default function ProjectClient({ project, prevProject, nextProject, relat
                         <div className="absolute inset-0"></div>
                     </div>
 
-                    {/* Top Info */}
-                    <div className="relative z-10 mb-8">
+                    {/* Top Info and Back Button */}
+                    <div className="relative z-10 mb-8 flex justify-between items-center w-full">
                         <span className="font-mono text-[10px] tracking-[0.4em] uppercase text-white/40">PROJECT ARCHIVE // {project.id || project.slug}</span>
+                        <Link
+                            href="/portfolio"
+                            className="flex items-center gap-2 text-white/60 hover:text-white transition-colors duration-300"
+                        >
+                            <ArrowLeft size={14} />
+                            <span className="font-mono text-[10px] tracking-[0.3em] uppercase">Back to Archive</span>
+                        </Link>
                     </div>
 
                     {/* Main Title Area */}
@@ -263,12 +270,12 @@ export default function ProjectClient({ project, prevProject, nextProject, relat
                         )}
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-16">
-                        {currentRelatedWorks.map(work => (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 lg:gap-16">
+                        {currentRelatedWorks.slice(0, 3).map((work, index) => (
                             <Link
                                 key={work.id || work.slug}
                                 href={`/project/${work.id || work.slug}`}
-                                className="group flex flex-col"
+                                className={`group flex-col ${index === 2 ? 'hidden lg:flex' : 'flex'}`}
                             >
                                 <div className="relative aspect-[3/2] overflow-hidden mb-8 rounded-sm">
                                     {work.images?.[0] && (

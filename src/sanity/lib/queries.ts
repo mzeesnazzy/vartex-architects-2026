@@ -15,6 +15,21 @@ export const featuredProjectsQuery = groq`
   }
 `
 
+// Fetch projects marked as Selected Works for homepage
+export const selectedWorksQuery = groq`
+  *[_type == "project" && selectedWork == true] | order(year desc) [0...2] {
+    id,
+    "slug": slug.current,
+    title,
+    location,
+    year,
+    category,
+    "image": mainImage.asset->url,
+    "images": [mainImage.asset->url],
+    description
+  }
+`
+
 // Fetch all projects for the Archive
 export const allProjectsQuery = groq`
   *[_type == "project"] | order(year desc) {
