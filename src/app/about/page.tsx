@@ -11,10 +11,8 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 
 const AWARDS = [
-    { year: "2024", title: "AIA Excellence in Residential Design", project: "House Aries", status: "Winner" },
-    { year: "2023", title: "Dezeen Awards - Cultural Project", project: "The Void Pavilion", status: "Shortlist" },
-    { year: "2023", title: "World Architecture Festival (WAF)", project: "Monolith Office", status: "Finalist" },
-    { year: "2022", title: "Lagos Architecture Biennale", project: "Urban Infill", status: "Silver Medal" },
+    { year: "2026", title: "AD 30/30VISION DESIGN COMPETITION", project: "AD Consulting LTD", status: "Participation" },
+    { year: "2025", title: "AD 30/30VISION DESIGN COMPETITION", project: "AD Consulting LTD", status: "2nd Prize" },
 ];
 
 export default function About() {
@@ -130,7 +128,7 @@ export default function About() {
                         <div className="flex justify-between items-end">
                             <div className="flex flex-col gap-2">
                                 <span className="font-mono text-[10px] tracking-[0.4em] text-primary/40 dark:text-white/40 uppercase">01 — ACCOLADES</span>
-                                <h2 className="text-4xl lg:text-6xl font-black uppercase tracking-tighter text-primary dark:text-white">Awards if any.</h2>
+                                <h2 className="text-4xl lg:text-6xl font-black uppercase tracking-tighter text-primary dark:text-white">Recognition.</h2>
                             </div>
                             <span className="font-mono text-[9px] tracking-widest text-primary/20 dark:text-white/20 uppercase hidden sm:block">CURATED SELECTION — 2020/2025</span>
                         </div>
