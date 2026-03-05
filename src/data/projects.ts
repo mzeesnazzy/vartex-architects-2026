@@ -28,7 +28,17 @@ export const projects: Project[] = [
         year: "2025",
         image: "/projects/nkanazu/PROJECT6-9Picture21.webp",
         description: "Clergy office and residence for the Catholic Archdiocese of Ibadan.",
-        tags: ["Office", "Residence", "Completed"]
+        tags: ["Office", "Residence", "Construction"]
+    },
+    {
+        id: "the-vartex-hub",
+        title: "THE VARTEX HUB",
+        category: "Architectural Design",
+        location: "Lagos, NG",
+        year: "2025",
+        image: "/projects/nkanazu/PROJECT6-11Picture23.webp",
+        description: "A state-of-the-art commercial headquarters that redefines the corporate workspace in Lagos.",
+        tags: ["Office", "Modern", "Lagos"]
     },
     {
         id: "the-corinthian",
@@ -38,7 +48,7 @@ export const projects: Project[] = [
         year: "2025",
         image: "/projects/nkanazu/PROJECT6-14Picture28.webp",
         description: "A private residence project in Anambra.",
-        tags: ["Private", "Residency", "Design Proposal"]
+        tags: ["Private", "Residency", "Anambra"]
     },
     {
         id: "house-aries",
@@ -48,7 +58,7 @@ export const projects: Project[] = [
         year: "2025",
         image: "/projects/nkanazu/PROJECT6-18Picture30.webp",
         description: "A private residence project in Lagos.",
-        tags: ["Private", "Lagos", "Design Proposal"]
+        tags: ["Private", "Lagos", "Aries"]
     },
     {
         id: "portfolio",
