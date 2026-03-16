@@ -15,6 +15,7 @@ interface Project {
     slug?: string;
     title: string;
     category?: string | string[];
+    categories?: string[];
     location?: string;
     year: string;
     image: string;
@@ -35,14 +36,14 @@ export default function PortfolioClient({ projects }: PortfolioClientProps) {
     const itemsPerPage = 4;
 
     const categories = ["All", ...Array.from(new Set(projects.flatMap(p => {
-        const cats = (p as any).categories || (p.category ? (Array.isArray(p.category) ? p.category : [p.category]) : []);
+        const cats = p.categories || (p.category ? (Array.isArray(p.category) ? p.category : [p.category]) : []);
         return cats;
     })))];
 
     const filteredProjects = filter === "All"
         ? projects
         : projects.filter(p => {
-            const projectCats = (p as any).categories || (p.category ? (Array.isArray(p.category) ? p.category : [p.category]) : []);
+            const projectCats = p.categories || (p.category ? (Array.isArray(p.category) ? p.category : [p.category]) : []);
             return projectCats.includes(filter);
         });
 
@@ -150,18 +151,18 @@ export default function PortfolioClient({ projects }: PortfolioClientProps) {
                                 <div className="grid grid-cols-3 border-t border-neutral-100 dark:border-white/5 pt-6 font-mono text-[9px] uppercase tracking-widest text-primary/40 dark:text-white/40">
                                     <div className="flex flex-col gap-2">
                                         <span>LOCATION</span>
-                                        <span className="text-primary dark:text-white text-[10px] font-bold uppercase">{project.location}</span>
+                                        <span className="text-primary dark:text-white text-[10px] font-bold uppercase">{project.location || "N/A"}</span>
                                     </div>
                                     <div className="flex flex-col gap-2">
                                         <span>YEAR</span>
-                                        <span className="text-primary dark:text-white text-[10px] font-bold">{project.year}</span>
+                                        <span className="text-primary dark:text-white text-[10px] font-bold">{project.year || "2025"}</span>
                                     </div>
                                     <div className="flex flex-col gap-2 text-right md:text-left">
                                         <span>TYPE</span>
                                         <span className="text-primary dark:text-white text-[10px] font-bold uppercase">
                                             {(() => {
-                                                const cats = (project as any).categories || (project.category ? (Array.isArray(project.category) ? project.category : [project.category]) : []);
-                                                return cats.length > 0 ? cats[0] : "ARCHITECTURE";
+                                                const projectCats = project.categories || (project.category ? (Array.isArray(project.category) ? project.category : [project.category]) : []);
+                                                return projectCats.length > 0 ? projectCats[0] : "ARCHITECTURE";
                                             })()}
                                         </span>
                                     </div>

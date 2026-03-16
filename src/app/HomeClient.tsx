@@ -16,6 +16,7 @@ interface Project {
     slug?: string;
     title: string;
     category?: string;
+    categories?: string[];
     location?: string;
     year: string;
     image: string;
@@ -35,6 +36,7 @@ export default function HomeClient({ featuredProjects, selectedWorks, allProject
 
     // Filter projects to ensure they have valid images to prevent preloading errors
     const validFeaturedProjects = featuredProjects.filter(p => p.image && p.image.length > 0);
+    const validSelectedWorks = selectedWorks.filter(p => p.image && p.image.length > 0);
 
     useEffect(() => {
         const ctx = gsap.context(() => {
@@ -267,7 +269,7 @@ export default function HomeClient({ featuredProjects, selectedWorks, allProject
                                     {activeProject.title}
                                 </h3>
                                 <p className="font-mono text-[9px] tracking-widest text-white/70 uppercase relative z-10 drop-shadow-sm font-semibold">
-                                    {activeProject.location} — {activeProject.year}
+                                    {activeProject.location || "LAGOS"} — {activeProject.year || "2025"}
                                 </p>
                             </Link>
                         )}
@@ -298,7 +300,7 @@ export default function HomeClient({ featuredProjects, selectedWorks, allProject
                     </div>
 
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-24">
-                        {selectedWorks.slice(0, 2).map((project) => (
+                        {validSelectedWorks.slice(0, 2).map((project) => (
                             <Link key={project.id || project.slug} href={`/project/${project.id || project.slug}`} aria-label={`View ${project.title} project details`} className="group flex flex-col gap-10 fade-in">
                                 <div className="relative aspect-[16/10] overflow-hidden bg-neutral-100 dark:bg-neutral-900 rounded-sm">
                                     <Image
@@ -317,18 +319,18 @@ export default function HomeClient({ featuredProjects, selectedWorks, allProject
                                     <div className="grid grid-cols-3 border-t border-neutral-100 dark:border-white/5 pt-6 font-mono text-[9px] uppercase tracking-widest text-primary/40 dark:text-white/40">
                                         <div className="flex flex-col gap-2">
                                             <span>LOCATION</span>
-                                            <span className="text-primary dark:text-white text-[10px] font-bold uppercase">{project.location}</span>
+                                            <span className="text-primary dark:text-white text-[10px] font-bold uppercase">{project.location || "N/A"}</span>
                                         </div>
                                         <div className="flex flex-col gap-2">
                                             <span>YEAR</span>
-                                            <span className="text-primary dark:text-white text-[10px] font-bold">{project.year}</span>
+                                            <span className="text-primary dark:text-white text-[10px] font-bold">{project.year || "2025"}</span>
                                         </div>
                                         <div className="flex flex-col gap-2">
                                             <span>TYPE</span>
                                             <span className="text-primary dark:text-white text-[10px] font-bold uppercase">
                                                 {(() => {
-                                                    const cats = (project as any).categories || (project.category ? (Array.isArray(project.category) ? project.category : [project.category]) : []);
-                                                    return cats.length > 0 ? cats[0] : "ARCHITECTURE";
+                                                    const projectCats = project.categories || (project.category ? [project.category] : []);
+                                                    return projectCats.length > 0 ? projectCats[0] : "ARCHITECTURE";
                                                 })()}
                                             </span>
                                         </div>

@@ -72,15 +72,23 @@ export default function JournalPostClient({ post, relatedPosts, prevPost, nextPo
 
                 {/* Hero Image */}
                 <div className="relative w-full h-[50vh] lg:h-[70vh] overflow-hidden fade-in">
-                    <Image
-                        src={post.image}
-                        alt={post.title}
-                        fill
-                        className="object-cover"
-                        sizes="100vw"
-                        priority
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/10" />
+                    {post.image ? (
+                        <>
+                            <Image
+                                src={post.image}
+                                alt={post.title}
+                                fill
+                                className="object-cover"
+                                sizes="100vw"
+                                priority
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/10" />
+                        </>
+                    ) : (
+                        <div className="w-full h-full bg-neutral-900 flex items-center justify-center">
+                            <span className="font-mono text-[10px] tracking-widest text-white/20 uppercase">No Image Provided</span>
+                        </div>
+                    )}
 
                     {/* Back Button */}
                     <Link
@@ -207,13 +215,17 @@ export default function JournalPostClient({ post, relatedPosts, prevPost, nextPo
                                     className={`group flex-col ${index === 2 ? 'hidden lg:flex' : 'flex'}`}
                                 >
                                     <div className="relative aspect-[3/2] overflow-hidden mb-8 rounded-sm">
-                                        <Image
-                                            src={related.image}
-                                            alt={related.title}
-                                            fill
-                                            className="object-cover group-hover:scale-105 transition-all duration-700"
-                                            sizes="(max-width: 768px) 100vw, 50vw"
-                                        />
+                                        {related.image ? (
+                                            <Image
+                                                src={related.image}
+                                                alt={related.title}
+                                                fill
+                                                className="object-cover group-hover:scale-105 transition-all duration-700"
+                                                sizes="(max-width: 768px) 100vw, 50vw"
+                                            />
+                                        ) : (
+                                            <div className="w-full h-full bg-neutral-100 dark:bg-white/5" />
+                                        )}
                                     </div>
                                     <span className="font-mono text-[9px] tracking-[0.3em] text-primary/40 dark:text-white/40 uppercase mb-3">
                                         {formatDate(related.date || related.publishedAt)}

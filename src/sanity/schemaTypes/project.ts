@@ -51,6 +51,13 @@ export default {
             of: [{ type: 'reference', to: [{ type: 'category' }] }],
         },
         {
+            name: 'category',
+            title: 'Category (legacy)',
+            description: 'Legacy category field for existing data transition.',
+            type: 'string',
+            group: 'basic',
+        },
+        {
             name: 'client',
             title: 'Client',
             type: 'string',

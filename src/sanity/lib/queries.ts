@@ -9,6 +9,7 @@ export const featuredProjectsQuery = groq`
     location,
     year,
     "categories": categories[]->title,
+    category,
     "image": mainImage.asset->url,
     "images": [mainImage.asset->url],
     description
@@ -17,13 +18,14 @@ export const featuredProjectsQuery = groq`
 
 // Fetch projects marked as Selected Works for homepage
 export const selectedWorksQuery = groq`
-  *[_type == "project" && selectedWork == true] | order(year desc) [0...2] {
+  *[_type == "project" && (selectedWork == true || "Selected Works" in categories[]->title)] | order(year desc) [0...2] {
     id,
     "slug": slug.current,
     title,
     location,
     year,
     "categories": categories[]->title,
+    category,
     "image": mainImage.asset->url,
     "images": [mainImage.asset->url],
     description
@@ -43,6 +45,7 @@ export const allProjectsQuery = groq`
     duration,
     description,
     "categories": categories[]->title,
+    category,
     "image": mainImage.asset->url,
     "images": [mainImage.asset->url],
   }
@@ -59,6 +62,7 @@ export const projectBySlugQuery = groq`
     year,
     area,
     "categories": categories[]->title,
+    category,
     description,
     "images": [mainImage.asset->url] + gallery[].asset->url,
     "mainImage": mainImage.asset->url,

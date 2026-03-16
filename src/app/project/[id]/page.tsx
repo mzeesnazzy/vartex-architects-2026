@@ -7,6 +7,31 @@ interface Props {
     params: Promise<{ id: string }>;
 }
 
+export async function generateMetadata({ params }: Props): Promise<any> {
+    const resolvedParams = await params;
+    const { id } = resolvedParams;
+
+    // Try fetching from Sanity first
+    let project: any = await getProjectBySlug(id);
+
+    // Fallback to mock data
+    if (!project) {
+        project = PROJECT_DETAILS[id as keyof typeof PROJECT_DETAILS];
+    }
+
+    if (!project) return { title: "Project Not Found" };
+
+    return {
+        title: project.title,
+        description: project.description?.slice(0, 160) || `Experience ${project.title} by VARTEX Architects. Architecture shaped by idea, context, and precision.`,
+        openGraph: {
+            title: project.title,
+            description: project.description?.slice(0, 160),
+            images: project.images?.[0] ? [{ url: project.images[0] }] : [],
+        },
+    };
+}
+
 export default async function ProjectPage({ params }: Props) {
     const resolvedParams = await params;
     const { id } = resolvedParams;

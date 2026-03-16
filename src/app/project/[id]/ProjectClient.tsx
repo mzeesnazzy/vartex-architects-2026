@@ -28,6 +28,7 @@ interface Project {
     materiality?: string;
     sustainability?: string;
     categories?: string[];
+    category?: string;
     description: string;
     images: string[];
 }
@@ -101,25 +102,17 @@ export default function ProjectClient({ project, prevProject, nextProject, relat
                     <div className="relative z-10 mb-8 w-full">
                         <Link
                             href="/portfolio"
-                            className="inline-flex items-center gap-3 text-white/40 hover:text-white transition-all duration-300 group px-4 py-2 border border-white/10 rounded-sm hover:border-white/40"
+                            className="inline-flex items-center gap-3 text-white/60 hover:text-white transition-all duration-300 group cursor-pointer"
                         >
-                            <ArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform" />
-                            <span className="font-mono text-[10px] tracking-[0.4em] uppercase">BACK TO PROJECT ARCHIVE</span>
+                            <ArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform shrink-0" />
+                            <span className="font-mono text-[10px] tracking-[0.4em] uppercase hover:underline underline-offset-4">← PROJECT ARCHIVE // {project.title}</span>
                         </Link>
                     </div>
 
                     {/* Main Title Area */}
                     <div className="hero-content relative z-10 w-full mb-16">
-                        <h1 className="text-7xl md:text-9xl lg:text-[11rem] xl:text-[13rem] font-black leading-[0.8] tracking-tighter uppercase flex flex-wrap items-baseline gap-x-4 md:gap-x-8 lg:gap-x-12">
-                            <span className="text-white">{project.title?.split(' ')[0]}</span>
-                            {project.title?.split(' ')[1] && (
-                                <span className="text-outline">
-                                    {project.title.split(' ')[1]}
-                                </span>
-                            )}
-                            <span className="text-white">
-                                {project.title?.split(' ').slice(2).join(' ')}
-                            </span>
+                        <h1 className="text-7xl md:text-9xl lg:text-[11rem] xl:text-[13rem] font-black leading-[0.8] tracking-tighter uppercase text-white">
+                            {project.title}
                         </h1>
                     </div>
 
@@ -135,10 +128,10 @@ export default function ProjectClient({ project, prevProject, nextProject, relat
                         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-x-12 gap-y-16 max-w-[1700px]">
                             {[
                                 { label: "CLIENT", value: project.client || "VARTEX" },
-                                { label: "LOCATION", value: project.location || "Enugu, Nigeria" },
-                                { label: "YEAR", value: project.year },
-                                { label: "AREA", value: project.area || "Architecture" },
-                                { label: "STATUS", value: project.duration || "N/A" },
+                                { label: "LOCATION", value: project.location || "N/A" },
+                                { label: "YEAR", value: project.year || "2025" },
+                                { label: "AREA", value: project.area || "ARCHITECTURE" },
+                                { label: "STATUS", value: project.duration || "COMPLETED" },
                             ].map((item, i) => (
                                 <div key={i} className="flex flex-col gap-4">
                                     <span className="font-mono text-[9px] uppercase text-white/30 tracking-[0.2em]">{item.label}</span>
@@ -160,7 +153,7 @@ export default function ProjectClient({ project, prevProject, nextProject, relat
 
                     {/* Full-Width Image Scroll */}
                     <div className="images-container flex flex-col gap-12 lg:gap-24 w-full">
-                        {project.images?.slice(1).map((img, i) => (
+                        {project.images?.filter(img => img && img.length > 0).slice(1).map((img, i) => (
                             <div key={i} className="image-scroll-item w-full relative group">
                                 <div className="absolute top-8 left-8 z-10 font-mono text-[9px] uppercase tracking-[0.4em] text-white/40 group-hover:text-white transition-colors">
                                     {String(i + 1).padStart(2, '0')} / {String((project.images?.length || 1) - 1).padStart(2, '0')}
@@ -269,8 +262,8 @@ export default function ProjectClient({ project, prevProject, nextProject, relat
                                 href={`/project/${work.id || work.slug}`}
                                 className={`group flex-col ${index === 2 ? 'hidden lg:flex' : 'flex'}`}
                             >
-                                <div className="relative aspect-[3/2] overflow-hidden mb-8 rounded-sm">
-                                    {work.images?.[0] && (
+                                <div className="relative aspect-[3/2] overflow-hidden mb-8 rounded-sm bg-neutral-900">
+                                    {work.images?.[0] ? (
                                         <Image
                                             src={work.images[0]}
                                             alt={work.title}
@@ -278,11 +271,18 @@ export default function ProjectClient({ project, prevProject, nextProject, relat
                                             className="object-cover group-hover:scale-105 transition-all duration-700"
                                             sizes="(max-width: 768px) 100vw, 33vw"
                                         />
+                                    ) : (
+                                        <div className="flex items-center justify-center h-full">
+                                            <span className="font-mono text-[9px] tracking-widest text-white/20 uppercase">No Image</span>
+                                        </div>
                                     )}
                                 </div>
                                 <div className="flex flex-col gap-2">
                                     <span className="font-mono text-[9px] tracking-[0.3em] text-primary/40 dark:text-white/40 uppercase">
-                                        {work.categories?.join(' // ') || "Architecture"} // {work.year}
+                                        {(() => {
+                                            const projectCats = work.categories || (work.category ? [work.category] : []);
+                                            return projectCats.length > 0 ? projectCats.join(' // ') : "ARCHITECTURE";
+                                        })()} // {work.year || "2025"}
                                     </span>
                                     <h4 className="text-xl font-black uppercase tracking-tight text-primary dark:text-white group-hover:text-primary/70 dark:group-hover:text-white/70 transition-colors">
                                         {work.title}
