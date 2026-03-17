@@ -3,11 +3,11 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { ArrowRight, ArrowUpRight, ArrowLeft } from "lucide-react";
+import { ArrowUpRight, ArrowLeft } from "lucide-react";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -44,9 +44,6 @@ interface ProjectClientProps {
 export default function ProjectClient({ project, prevProject, nextProject, relatedWorks,
 }: ProjectClientProps) {
     const mainRef = useRef(null);
-    const headerRef = useRef(null);
-    const [currentPage, setCurrentPage] = useState(1);
-    const projectsPerPage = 3;
 
     // Category-based related works logic
     const matchingCategory = project.categories?.[0] || project.category;
@@ -62,20 +59,6 @@ export default function ProjectClient({ project, prevProject, nextProject, relat
         if (!aMatches && bMatches) return 1;
         return 0;
     });
-
-    // Pagination logic
-    const totalPages = Math.ceil(sortedRelatedWorks.length / projectsPerPage);
-    const indexOfLastProject = currentPage * projectsPerPage;
-    const indexOfFirstProject = indexOfLastProject - projectsPerPage;
-    const currentRelatedWorks = sortedRelatedWorks.slice(indexOfFirstProject, indexOfLastProject);
-
-    const paginate = (pageNumber: number) => {
-        setCurrentPage(pageNumber);
-        const section = document.getElementById('related-architecture');
-        if (section) {
-            section.scrollIntoView({ behavior: 'smooth' });
-        }
-    };
 
     useEffect(() => {
         const ctx = gsap.context(() => {
@@ -127,7 +110,7 @@ export default function ProjectClient({ project, prevProject, nextProject, relat
                     <>
                         {/* Hero Section */}
                 <section className="relative min-h-[70vh] flex flex-col px-8 lg:px-24 pt-32 pb-8 bg-[#0a0a0a] overflow-hidden">
-                    {/* Background Detail - Removed image background for plain style */}
+                    {/* Background Detail */}
                     <div className="absolute inset-0 z-0 opacity-15 pointer-events-none bg-[#0a0a0a]">
                         <div className="absolute inset-0"></div>
                     </div>
@@ -155,13 +138,6 @@ export default function ProjectClient({ project, prevProject, nextProject, relat
                                 </span>
                             ))}
                         </h1>
-                    </div>
-
-                    {/* Technical Mark */}
-                    <div className="absolute right-12 bottom-[40%] w-32 h-32 pointer-events-none opacity-20 hidden lg:block">
-                        <div className="absolute top-0 right-16 w-[1px] h-full bg-white"></div>
-                        <div className="absolute top-16 right-0 w-full h-[1px] bg-white"></div>
-                        <div className="absolute top-16 right-16 w-3 h-3 -mt-[6px] -mr-[6px] border border-white rotate-45"></div>
                     </div>
 
                     {/* Metadata Section */}
@@ -271,33 +247,12 @@ export default function ProjectClient({ project, prevProject, nextProject, relat
 
                 {/* Related Works */}
                 <section id="related-architecture" className="px-8 lg:px-24 py-24 bg-white dark:bg-background-dark border-t border-neutral-100 dark:border-white/5 relative z-10">
-                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-16 gap-6">
+                    <div className="mb-16">
                         <h3 className="font-mono text-[10px] tracking-[0.4em] text-primary/40 dark:text-white/40 uppercase">Related Architecture</h3>
-
-                        {/* Pagination Controls */}
-                        {totalPages > 1 && (
-                            <div className="flex items-center gap-4 font-mono text-[9px] tracking-[0.2em] uppercase">
-                                <span className="text-primary/30 dark:text-white/30">Page {currentPage} of {totalPages}</span>
-                                <div className="flex gap-2">
-                                    {Array.from({ length: totalPages }, (_, i) => i + 1).map((number) => (
-                                        <button
-                                            key={number}
-                                            onClick={() => paginate(number)}
-                                            className={`w-8 h-8 flex items-center justify-center border transition-all ${currentPage === number
-                                                ? 'bg-primary text-white border-primary'
-                                                : 'border-neutral-200 dark:border-white/10 text-primary/40 dark:text-white/40 hover:border-primary dark:hover:border-white'
-                                                }`}
-                                        >
-                                            {number}
-                                        </button>
-                                    ))}
-                                </div>
-                            </div>
-                        )}
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 lg:gap-16">
-                        {currentRelatedWorks.slice(0, 3).map((work, index) => (
+                        {sortedRelatedWorks.slice(0, 3).map((work, index) => (
                             <Link
                                 key={work.id || work.slug}
                                 href={`/project/${work.id || work.slug}`}
@@ -341,6 +296,6 @@ export default function ProjectClient({ project, prevProject, nextProject, relat
             </main>
 
             <Footer />
-        </div >
+        </div>
     );
 }
