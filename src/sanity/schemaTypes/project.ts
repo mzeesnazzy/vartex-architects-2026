@@ -26,6 +26,19 @@ export default {
             validation: (Rule: any) => Rule.required(),
         },
         {
+            name: "isComingSoon",
+            title: "Coming Soon",
+            type: "boolean",
+            initialValue: false,
+            description: "If enabled, this project will be marked as 'Coming Soon' and will not be clickable."
+        },
+        {
+            name: 'order',
+            title: 'Order',
+            description: 'Manual sorting order (1 = first, 2 = second, etc.). New projects default to top.',
+            type: 'number',
+        },
+        {
             name: 'featured',
             title: 'Featured on Homepage',
             description: 'If toggled, this project will appear in the home page hero carousel.',

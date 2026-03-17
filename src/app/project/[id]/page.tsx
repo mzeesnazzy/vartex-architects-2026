@@ -64,8 +64,7 @@ export default async function ProjectPage({ params }: Props) {
 
     // Related works (excluding current)
     const relatedWorks = activeProjects
-        .filter(p => (p.slug || p.id) !== id)
-        .slice(0, 3);
+        .filter(p => (p.slug || p.id) !== id);
 
     return (
         <ProjectClient

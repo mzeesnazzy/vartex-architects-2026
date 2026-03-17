@@ -21,6 +21,7 @@ interface Project {
     year: string;
     image: string;
     description?: string;
+    isComingSoon?: boolean;
 }
 
 interface HomeClientProps {
@@ -243,9 +244,9 @@ export default function HomeClient({ featuredProjects, selectedWorks, allProject
                         {/* Featured Tag — Liquid Glass / See-through */}
                         {activeProject && (
                             <Link
-                                href={`/project/${activeProject.id || activeProject.slug}`}
-                                onClick={(e) => e.stopPropagation()}
-                                className="absolute bottom-4 left-4 md:bottom-10 md:left-10 p-4 md:p-8 backdrop-blur-xl border border-white/40 dark:border-white/20 rounded-xl md:rounded-2xl shadow-2xl flex flex-col gap-1 md:gap-2 min-w-[160px] md:min-w-[280px] overflow-hidden z-20 group/tag transition-all hover:scale-[1.02]"
+                                href={activeProject.isComingSoon ? "#" : `/project/${activeProject.id || activeProject.slug}`}
+                                onClick={(e) => activeProject.isComingSoon ? e.preventDefault() : e.stopPropagation()}
+                                className={`absolute bottom-4 left-4 md:bottom-10 md:left-10 p-4 md:p-8 backdrop-blur-xl border border-white/40 dark:border-white/20 rounded-xl md:rounded-2xl shadow-2xl flex flex-col gap-1 md:gap-2 min-w-[160px] md:min-w-[280px] overflow-hidden z-20 group/tag transition-all ${activeProject.isComingSoon ? 'cursor-default' : 'hover:scale-[1.02]'}`}
                                 style={{
                                     background: 'linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.05) 50%, rgba(200,200,210,0.05) 100%)',
                                     boxShadow: '0 8px 32px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.1)',
@@ -259,14 +260,15 @@ export default function HomeClient({ featuredProjects, selectedWorks, allProject
 
                                 <div className="flex items-center justify-between mb-1">
                                     <span className="font-mono text-[9px] tracking-widest text-white/90 uppercase relative z-10 font-bold drop-shadow-sm flex items-center gap-2">
-                                        <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
-                                        Featured Project
+                                        <span className={`w-1.5 h-1.5 rounded-full ${activeProject.isComingSoon ? 'bg-white/40' : 'bg-white animate-pulse'}`} />
+                                        {activeProject.isComingSoon ? "Project Pending" : "Featured Project"}
                                     </span>
-                                    <ArrowUpRight className="w-4 h-4 text-white/60 group-hover/tag:text-white transition-colors" />
+                                    {!activeProject.isComingSoon && <ArrowUpRight className="w-4 h-4 text-white/60 group-hover/tag:text-white transition-colors" />}
                                 </div>
 
                                 <h3 className="text-lg md:text-2xl font-black tracking-tight text-white relative z-10 drop-shadow-md">
                                     {activeProject.title}
+                                    {activeProject.isComingSoon && <span className="block text-[10px] mt-2 opacity-60">COMING SOON</span>}
                                 </h3>
                                 <p className="font-mono text-[9px] tracking-widest text-white/70 uppercase relative z-10 drop-shadow-sm font-semibold">
                                     {activeProject.location || "LAGOS"} — {activeProject.year || "2025"}
@@ -300,8 +302,14 @@ export default function HomeClient({ featuredProjects, selectedWorks, allProject
                     </div>
 
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-24">
-                        {validSelectedWorks.slice(0, 2).map((project) => (
-                            <Link key={project.id || project.slug} href={`/project/${project.id || project.slug}`} aria-label={`View ${project.title} project details`} className="group flex flex-col gap-10 fade-in">
+                        {validSelectedWorks.slice(0, 2).map((project) => {
+                            const ProjectWrapper = project.isComingSoon ? 'div' : Link;
+                            const wrapperProps = project.isComingSoon 
+                                ? { className: "flex flex-col gap-10 fade-in cursor-default" }
+                                : { href: `/project/${project.id || project.slug}`, className: "group flex flex-col gap-10 fade-in" };
+
+                            return (
+                                <ProjectWrapper key={project.id || project.slug} {...wrapperProps as any}>
                                 <div className="relative aspect-[16/10] overflow-hidden bg-neutral-100 dark:bg-neutral-900 rounded-sm">
                                     <Image
                                         src={project.image}
@@ -310,9 +318,19 @@ export default function HomeClient({ featuredProjects, selectedWorks, allProject
                                         fill
                                         sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 40vw"
                                     />
-                                    <div className="absolute top-6 right-6 p-4 bg-white/90 dark:bg-black/90 rounded-full opacity-0 group-hover:opacity-100 transition-all translate-x-4 group-hover:translate-x-0 flex items-center justify-center">
-                                        <ArrowUpRight className="w-4 h-4 text-primary dark:text-white" />
-                                    </div>
+                                    {!project.isComingSoon && (
+                                        <div className="absolute top-6 right-6 p-4 bg-white/90 dark:bg-black/90 rounded-full opacity-0 group-hover:opacity-100 transition-all translate-x-4 group-hover:translate-x-0 flex items-center justify-center">
+                                            <ArrowUpRight className="w-4 h-4 text-primary dark:text-white" />
+                                        </div>
+                                    )}
+
+                                    {project.isComingSoon && (
+                                        <div className="absolute inset-0 bg-black/40 backdrop-blur-[1px] z-10 flex items-center justify-center">
+                                            <span className="font-mono text-[10px] tracking-[0.3em] uppercase text-white border border-white/40 px-6 py-3 bg-black/40">
+                                                Coming Soon
+                                            </span>
+                                        </div>
+                                    )}
                                 </div>
                                 <div className="flex flex-col gap-6">
                                     <h3 className="text-3xl lg:text-4xl font-bold tracking-tighter text-primary dark:text-white">{project.title}</h3>
@@ -336,8 +354,8 @@ export default function HomeClient({ featuredProjects, selectedWorks, allProject
                                         </div>
                                     </div>
                                 </div>
-                            </Link>
-                        ))}
+                            </ProjectWrapper>
+                        )})}
                     </div>
                 </section>
 

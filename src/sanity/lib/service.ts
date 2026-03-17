@@ -1,5 +1,5 @@
 import { client } from './client'
-import { featuredProjectsQuery, selectedWorksQuery, allProjectsQuery, projectBySlugQuery, allBlogsQuery, blogBySlugQuery } from './queries'
+import { featuredProjectsQuery, selectedWorksQuery, allProjectsQuery, projectBySlugQuery, allBlogsQuery, blogBySlugQuery, siteSettingsQuery } from './queries'
 import { projects as mockProjects } from '@/data/projects'
 // Note: journal mock data isn't in a central file yet, will handle fallback for it too
 
@@ -77,6 +77,18 @@ export async function getBlogBySlug(slug: string) {
 
     try {
         return await client.fetch(blogBySlugQuery, { slug })
+    } catch (error) {
+        console.error('Sanity fetch error:', error)
+        return null
+    }
+}
+
+export async function getSiteSettings() {
+    try {
+        if (process.env.NEXT_PUBLIC_SANITY_PROJECT_ID === 'missing' || !process.env.NEXT_PUBLIC_SANITY_PROJECT_ID) {
+            return null
+        }
+        return await client.fetch(siteSettingsQuery)
     } catch (error) {
         console.error('Sanity fetch error:', error)
         return null

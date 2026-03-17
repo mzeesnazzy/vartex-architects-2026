@@ -26,6 +26,13 @@ export default {
             initialValue: (new Date()).toISOString(),
         },
         {
+            name: 'isComingSoon',
+            title: 'Coming Soon',
+            description: 'If toggled, the blog post will show a "Coming Soon" tag and will not be clickable.',
+            type: 'boolean',
+            initialValue: false,
+        },
+        {
             name: 'featured',
             title: 'Featured Post',
             description: 'The latest featured post will appear promently in the Journal index.',

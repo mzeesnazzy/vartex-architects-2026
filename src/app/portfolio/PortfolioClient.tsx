@@ -23,6 +23,7 @@ interface Project {
     duration?: string;
     client?: string;
     dimensions?: string;
+    isComingSoon?: boolean;
 }
 
 interface PortfolioClientProps {
@@ -108,15 +109,18 @@ export default function PortfolioClient({ projects }: PortfolioClientProps) {
                     </div>
                 </section>
 
-                {/* Projects Grid */}
                 <section ref={containerRef} className="px-8 lg:px-24 py-24 grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-24" aria-label="Project grid">
-                    {currentProjects.map((project, index) => (
-                        <Link
-                            href={`/project/${project.id || project.slug}`}
-                            key={project.id || project.slug}
-                            aria-label={`View details for ${project.title}`}
-                            className="portfolio-item group flex flex-col gap-6"
-                        >
+                    {currentProjects.map((project, index) => {
+                        const ProjectWrapper = project.isComingSoon ? 'div' : Link;
+                        const wrapperProps = project.isComingSoon 
+                            ? { className: "portfolio-item flex flex-col gap-6 cursor-default" }
+                            : { href: `/project/${project.id || project.slug}`, className: "portfolio-item group flex flex-col gap-6" };
+
+                        return (
+                            <ProjectWrapper
+                                key={project.id || project.slug}
+                                {...wrapperProps as any}
+                            >
                             <div className="relative aspect-[16/10] overflow-hidden bg-neutral-100 dark:bg-neutral-800 rounded-sm">
                                 {/* Corner axis marks */}
                                 <div className="absolute top-0 left-0 w-8 h-8 pointer-events-none z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
@@ -137,11 +141,22 @@ export default function PortfolioClient({ projects }: PortfolioClientProps) {
                                         <span className="font-mono text-[10px] tracking-widest text-primary/20 dark:text-white/20 uppercase">Image Pending</span>
                                     </div>
                                 )}
+
+                                {project.isComingSoon && (
+                                    <div className="absolute inset-0 bg-black/40 backdrop-blur-[1px] z-10 flex items-center justify-center">
+                                        <span className="font-mono text-[10px] tracking-[0.3em] uppercase text-white border border-white/40 px-6 py-3 bg-black/40">
+                                            Coming Soon
+                                        </span>
+                                    </div>
+                                )}
+
                                 <div className="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 border border-white/20"></div>
 
-                                <div className="absolute bottom-6 right-6 font-mono text-[10px] text-white opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-500 tracking-widest flex items-center gap-2">
-                                    VIEW SPECIFICATIONS <ArrowRight className="w-3 h-3" />
-                                </div>
+                                {!project.isComingSoon && (
+                                    <div className="absolute bottom-6 right-6 font-mono text-[10px] text-white opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-500 tracking-widest flex items-center gap-2">
+                                        VIEW SPECIFICATIONS <ArrowRight className="w-3 h-3" />
+                                    </div>
+                                )}
                             </div>
 
                             <div className="flex flex-col gap-6">
@@ -168,8 +183,9 @@ export default function PortfolioClient({ projects }: PortfolioClientProps) {
                                     </div>
                                 </div>
                             </div>
-                        </Link>
-                    ))}
+                        </ProjectWrapper>
+                    );
+                })}
                 </section>
 
                 {/* Pagination Controls */}

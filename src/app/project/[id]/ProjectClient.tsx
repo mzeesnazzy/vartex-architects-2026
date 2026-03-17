@@ -27,6 +27,7 @@ interface Project {
     duration?: string;
     materiality?: string;
     sustainability?: string;
+    isComingSoon?: boolean;
     categories?: string[];
     category?: string;
     description: string;
@@ -47,11 +48,26 @@ export default function ProjectClient({ project, prevProject, nextProject, relat
     const [currentPage, setCurrentPage] = useState(1);
     const projectsPerPage = 3;
 
+    // Category-based related works logic
+    const matchingCategory = project.categories?.[0] || project.category;
+    
+    const sortedRelatedWorks = [...relatedWorks].sort((a, b) => {
+        const aCats = a.categories || (a.category ? [a.category] : []);
+        const bCats = b.categories || (b.category ? [b.category] : []);
+        
+        const aMatches = aCats.includes(matchingCategory || "");
+        const bMatches = bCats.includes(matchingCategory || "");
+        
+        if (aMatches && !bMatches) return -1;
+        if (!aMatches && bMatches) return 1;
+        return 0;
+    });
+
     // Pagination logic
-    const totalPages = Math.ceil(relatedWorks.length / projectsPerPage);
+    const totalPages = Math.ceil(sortedRelatedWorks.length / projectsPerPage);
     const indexOfLastProject = currentPage * projectsPerPage;
     const indexOfFirstProject = indexOfLastProject - projectsPerPage;
-    const currentRelatedWorks = relatedWorks.slice(indexOfFirstProject, indexOfLastProject);
+    const currentRelatedWorks = sortedRelatedWorks.slice(indexOfFirstProject, indexOfLastProject);
 
     const paginate = (pageNumber: number) => {
         setCurrentPage(pageNumber);
@@ -90,8 +106,26 @@ export default function ProjectClient({ project, prevProject, nextProject, relat
         <div className="flex flex-col min-h-screen">
             <Header />
 
-            <main ref={mainRef} className="flex-grow architectural-grid bg-[#0a0a0a] text-white">
-                {/* Hero Section */}
+            <main ref={mainRef} className={`flex-grow ${project.isComingSoon ? 'bg-white dark:bg-background-dark pt-20' : 'architectural-grid bg-[#0a0a0a] text-white'}`}>
+                {project.isComingSoon ? (
+                    <section className="px-8 lg:px-24 py-40 flex flex-col items-center justify-center min-h-[70vh] text-center border-b border-neutral-100 dark:border-white/5">
+                        <span className="font-mono text-[10px] tracking-[0.4em] text-primary/40 dark:text-white/40 uppercase mb-8">Architecture — In Development</span>
+                        <h2 className="text-6xl lg:text-9xl font-black uppercase tracking-tighter leading-none text-primary dark:text-white mb-12">
+                            PROJECT <br /> COMING SOON.
+                        </h2>
+                        <p className="text-xl font-light text-primary/60 dark:text-white/60 max-w-lg leading-relaxed mb-12">
+                            We are currently finalizing the documentation and visualization for <strong>{project.title}</strong>. Please check back soon for the full project reveal.
+                        </p>
+                        <Link 
+                            href="/portfolio" 
+                            className="bg-primary dark:bg-white text-white dark:text-primary px-10 py-5 rounded-sm font-bold uppercase tracking-widest text-xs hover:bg-black dark:hover:bg-neutral-200 transition-all duration-300"
+                        >
+                            Back to Portfolio
+                        </Link>
+                    </section>
+                ) : (
+                    <>
+                        {/* Hero Section */}
                 <section className="relative min-h-[70vh] flex flex-col px-8 lg:px-24 pt-32 pb-8 bg-[#0a0a0a] overflow-hidden">
                     {/* Background Detail - Removed image background for plain style */}
                     <div className="absolute inset-0 z-0 opacity-15 pointer-events-none bg-[#0a0a0a]">
@@ -110,9 +144,16 @@ export default function ProjectClient({ project, prevProject, nextProject, relat
                     </div>
 
                     {/* Main Title Area */}
-                    <div className="hero-content relative z-10 w-full mb-16">
-                        <h1 className="text-7xl md:text-9xl lg:text-[11rem] xl:text-[13rem] font-black leading-[0.8] tracking-tighter uppercase text-white">
-                            {project.title}
+                    <div className="relative z-10 w-full mb-16 lg:pl-0">
+                        <h1 className="text-6xl md:text-9xl lg:text-[11rem] xl:text-[13rem] font-black leading-[0.8] tracking-tighter uppercase text-white flex flex-wrap gap-x-6 md:gap-x-12">
+                            {project.title.split(' ').map((word, idx) => (
+                                <span 
+                                    key={idx}
+                                    className={idx % 2 === 1 ? "lg:text-transparent lg:[-webkit-text-stroke:2px_white]" : ""}
+                                >
+                                    {word}
+                                </span>
+                            ))}
                         </h1>
                     </div>
 
@@ -123,19 +164,21 @@ export default function ProjectClient({ project, prevProject, nextProject, relat
                         <div className="absolute top-16 right-16 w-3 h-3 -mt-[6px] -mr-[6px] border border-white rotate-45"></div>
                     </div>
 
-                    {/* Project Metadata Row */}
-                    <div className="relative z-10 w-full border-t border-white/10 pt-12 pb-8">
-                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-x-12 gap-y-16 max-w-[1700px]">
+                    {/* Metadata Section */}
+                    <div className="relative z-10 w-full pt-12 border-t border-white/10">
+                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-12 md:gap-8 lg:gap-12">
                             {[
-                                { label: "CLIENT", value: project.client || "VARTEX" },
+                                { label: "CLIENT", value: project.client || "NA" },
                                 { label: "LOCATION", value: project.location || "NA" },
                                 { label: "YEAR", value: project.year || "2025" },
                                 { label: "AREA", value: project.area || "NA" },
                                 { label: "STATUS", value: project.duration || "NA" },
-                            ].map((item, i) => (
-                                <div key={i} className="flex flex-col gap-4">
-                                    <span className="font-mono text-[9px] uppercase text-white/30 tracking-[0.2em]">{item.label}</span>
-                                    <span className="font-bold text-lg md:text-xl tracking-tight leading-none text-white whitespace-nowrap">{item.value}</span>
+                            ].map(({ label, value }) => (
+                                <div key={label} className="flex flex-col gap-4">
+                                    <span className="font-mono text-[9px] tracking-[0.3em] uppercase text-white/30">{label}</span>
+                                    <span className={`font-black text-lg md:text-xl tracking-tight uppercase text-white ${label === 'CLIENT' ? 'break-words' : 'whitespace-nowrap'}`}>
+                                        {value}
+                                    </span>
                                 </div>
                             ))}
                         </div>
@@ -293,6 +336,8 @@ export default function ProjectClient({ project, prevProject, nextProject, relat
                         ))}
                     </div>
                 </section>
+                    </>
+                )}
             </main>
 
             <Footer />

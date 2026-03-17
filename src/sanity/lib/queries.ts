@@ -10,6 +10,7 @@ export const featuredProjectsQuery = groq`
     year,
     "categories": categories[]->title,
     category,
+    isComingSoon,
     "image": mainImage.asset->url,
     "images": [mainImage.asset->url],
     description
@@ -18,7 +19,7 @@ export const featuredProjectsQuery = groq`
 
 // Fetch projects marked as Selected Works for homepage
 export const selectedWorksQuery = groq`
-  *[_type == "project" && (selectedWork == true || "Selected Works" in categories[]->title)] | order(year desc, _createdAt desc) [0...2] {
+  *[_type == "project" && selectedWork == true] | order(coalesce(order, 0) asc, year desc, _createdAt desc) [0...2] {
     id,
     "slug": slug.current,
     title,
@@ -26,6 +27,7 @@ export const selectedWorksQuery = groq`
     year,
     "categories": categories[]->title,
     category,
+    isComingSoon,
     "image": mainImage.asset->url,
     "images": [mainImage.asset->url],
     description
@@ -34,7 +36,7 @@ export const selectedWorksQuery = groq`
 
 // Fetch all projects for the Archive
 export const allProjectsQuery = groq`
-  *[_type == "project"] | order(year desc, _createdAt desc) {
+  *[_type == "project"] | order(coalesce(order, 0) asc, year desc, _createdAt desc) {
     id,
     "slug": slug.current,
     title,
@@ -44,6 +46,7 @@ export const allProjectsQuery = groq`
     area,
     duration,
     description,
+    isComingSoon,
     "categories": categories[]->title,
     category,
     "image": mainImage.asset->url,
@@ -61,6 +64,7 @@ export const projectBySlugQuery = groq`
     location,
     year,
     area,
+    isComingSoon,
     "categories": categories[]->title,
     category,
     description,
@@ -79,6 +83,7 @@ export const allBlogsQuery = groq`
     "slug": slug.current,
     publishedAt,
     featured,
+    isComingSoon,
     "image": mainImage.asset->url,
     category,
     readTime,
@@ -92,10 +97,20 @@ export const blogBySlugQuery = groq`
     "slug": slug.current,
     publishedAt,
     featured,
+    isComingSoon,
     "image": mainImage.asset->url,
-    category,
     readTime,
     body,
     author
+  }
+`
+
+// Fetch site settings
+export const siteSettingsQuery = groq`
+  *[_type == "siteSettings"][0] {
+    title,
+    description,
+    keywords,
+    journalComingSoon
   }
 `
