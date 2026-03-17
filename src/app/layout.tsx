@@ -33,8 +33,8 @@ export const metadata: Metadata = {
         telephone: false,
     },
     openGraph: {
-        title: "Vartex Architects",
-        description: "Architecture shaped by idea, context, and precision.",
+        title: "Vartex Architects | Architecture, Interior Design & 3D Visualization",
+        description: "Shaping the modern landscape through mathematical rigor and artistic intuition.",
         url: 'https://vartex.pro',
         siteName: 'Vartex Architects',
         images: [
@@ -50,8 +50,8 @@ export const metadata: Metadata = {
     },
     twitter: {
         card: "summary_large_image",
-        title: "Vartex Architects",
-        description: "Architecture shaped by idea, context, and precision.",
+        title: "Vartex Architects | Architecture, Interior Design & 3D Visualization",
+        description: "Shaping the modern landscape through mathematical rigor and artistic intuition.",
         images: ["/og-image.jpg"],
     },
     robots: {
