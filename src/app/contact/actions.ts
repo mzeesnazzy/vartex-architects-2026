@@ -71,19 +71,19 @@ export async function contactInquiryAction(prevState: FormState, formData: FormD
     console.log("NEW INQUIRY RECEIVED:", inquiryData);
 
     // Send emails only if credentials are configured
-    if (process.env.ZOHO_USER && process.env.ZOHO_APP_PASSWORD) {
+    if (process.env.RESEND_API_KEY) {
         try {
             await Promise.all([
                 sendClientNotification(inquiryData),
                 sendVisitorConfirmation(inquiryData),
             ]);
-            console.log("✅ Both emails sent successfully");
+            console.log("✅ Both emails sent successfully via Resend");
         } catch (error) {
             console.error("❌ Email sending failed:", error);
             // Still return success — the inquiry was received, even if email fails
         }
     } else {
-        console.log("⚠️ Email credentials not configured — skipping email send");
+        console.log("⚠️ Resend API Key not configured — skipping email send");
     }
 
     // Log to Google Sheets

@@ -56,7 +56,7 @@ function doPost(e) {
     const data = JSON.parse(e.postData.contents);
     
     // Contact Form Logging
-    if (data.type === 'contact') {
+    if (data.formType === 'contact') {
       sheet.appendRow([
         data.submittedAt || new Date(),
         data.refNumber,
