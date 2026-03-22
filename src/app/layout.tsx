@@ -22,7 +22,7 @@ export const metadata: Metadata = {
         default: "Vartex Architects | Architecture, Interior Design & 3D Visualization",
         template: "%s | Vartex Architects"
     },
-    description: "Shaping the modern landscape through mathematical rigor and artistic intuition.",
+    description: "Creating Functional, Timeless and Sustainable design solutions",
     keywords: ["Architecture", "Sustainable Design", "Vartex Architects", "Modern Architecture", "Industrial Design", "Residential Architecture", "Enugu Architects", "Lagos Architects"],
     authors: [{ name: "Vartex Studio" }],
     creator: "Vartex Studio",
@@ -34,7 +34,7 @@ export const metadata: Metadata = {
     },
     openGraph: {
         title: "Vartex Architects | Architecture, Interior Design & 3D Visualization",
-        description: "Shaping the modern landscape through mathematical rigor and artistic intuition.",
+        description: "Creating Functional, Timeless and Sustainable design solutions",
         url: 'https://vartex.pro',
         siteName: 'Vartex Architects',
         images: [
@@ -51,7 +51,7 @@ export const metadata: Metadata = {
     twitter: {
         card: "summary_large_image",
         title: "Vartex Architects | Architecture, Interior Design & 3D Visualization",
-        description: "Shaping the modern landscape through mathematical rigor and artistic intuition.",
+        description: "Creating Functional, Timeless and Sustainable design solutions",
         images: ["/og-image.jpg"],
     },
     robots: {
