@@ -43,6 +43,11 @@ Once the token is added to the website settings (by your developer), you can vie
 2. Name it "Vartex Website" and give it "Full access".
 3. **Copy the API Key** (starts with `re_...`).
 
+### Step 4: Configure Sender Emails (Optional but Recommended)
+By default, the website sends from `info@vartexarchitects.com`. If you need to change this, provide the following environment variables to your developer:
+- `EMAIL_FROM`: The address that sends the emails (e.g., `info@vartexarchitects.com`).
+- `EMAIL_TO`: The address where you receive notifications (e.g., `info@vartexarchitects.com`).
+
 ---
 
 ## Part 3: Google Sheets Webhook (Optional Backup)
@@ -75,3 +80,10 @@ function doPost(e) {
 ## Final Step
 Provide the **Sanity API Token**, **Resend API Key**, and (optionally) the **Google Sheets URL** to your developer to finalize the setup.
 
+## 🛠 Troubleshooting Email Issues
+
+If emails are not arriving:
+1. **Verify Domain**: In Resend, your domain must show as **"Verified"**. If it says "Pending", your DNS records are not set up correctly.
+2. **Redeploy**: If you added the `RESEND_API_KEY` to Vercel, you **must** trigger a "Redeploy" for it to take effect.
+3. **Check Logs**: Check your Vercel project logs for any "Email sending failed" errors.
+4. **Spam**: Check your spam folder for emails from `info@vartexarchitects.com`.

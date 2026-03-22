@@ -147,8 +147,8 @@ export async function sendClientNotification(data: InquiryData) {
     </html>`;
 
     await resend.emails.send({
-        from: 'Vartex Architects <info@vartexarchitects.com>',
-        to: ['info@vartexarchitects.com'],
+        from: `Vartex Architects <${process.env.EMAIL_FROM || "info@vartexarchitects.com"}>`,
+        to: [process.env.EMAIL_TO || "info@vartexarchitects.com"],
         subject: `🔔 New Project Inquiry — ${data.name} (${data.type})`,
         html,
     });
@@ -264,7 +264,7 @@ export async function sendVisitorConfirmation(data: InquiryData) {
     </html>`;
 
     await resend.emails.send({
-        from: 'Vartex Architects <info@vartexarchitects.com>',
+        from: `Vartex Architects <${process.env.EMAIL_FROM || "info@vartexarchitects.com"}>`,
         to: [data.email],
         subject: "Welcome — We've Received Your Message",
         html,

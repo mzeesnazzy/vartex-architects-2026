@@ -93,9 +93,18 @@ export default {
         {
             name: 'duration',
             title: 'Status',
-            description: 'Current status of the project (e.g., In View, Completed, On-going).',
+            description: 'Current status of the project.',
             type: 'string',
             group: 'basic',
+            options: {
+                list: [
+                    { title: 'Design Proposal', value: 'Design Proposal' },
+                    { title: 'Construction Ongoing', value: 'Construction Ongoing' },
+                    { title: 'Construction Completed', value: 'Construction Completed' },
+                ],
+                layout: 'dropdown'
+            },
+            initialValue: 'Design Proposal'
         },
         {
             name: 'materiality',
