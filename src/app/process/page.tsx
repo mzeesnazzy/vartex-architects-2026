@@ -32,7 +32,7 @@ const STEPS = [
             "Floor Plan Optimization",
             "Structural Coordination"
         ],
-        image: "/images/process/construction-site-execution.jpg"
+        image: "/images/process/digital-skyscraper-modeling.jpg"
     },
     {
         id: "03",
@@ -45,7 +45,7 @@ const STEPS = [
             "Specification Writing",
             "Permit Documentation"
         ],
-        image: "/images/process/digital-skyscraper-modeling.jpg"
+        image: "/images/process/architect-studio-workspace.jpg"
     },
     {
         id: "04",
@@ -58,7 +58,7 @@ const STEPS = [
             "Finish & Fixture Selection",
             "Final Project Delivery"
         ],
-        image: "/images/process/architect-studio-workspace.jpg"
+        image: "/images/process/construction-site-execution.jpg"
     }
 ];
 
