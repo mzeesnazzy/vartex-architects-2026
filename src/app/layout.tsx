@@ -23,7 +23,7 @@ export const metadata: Metadata = {
         default: "Vartex Architects | Architecture, Interior Design & 3D Visualization",
         template: "%s | Vartex Architects"
     },
-    description: "Creating Functional, Timeless and Sustainable design solutions. Architecture, interior design and 3D visualization services.",
+    description: "Architecture shaped by idea, context, and precision. Architecture, interior design and 3D visualization services.",
     metadataBase: new URL("https://vartexarchitects.com"),
     keywords: ["Architecture", "Sustainable Design", "Vartex Architects", "Vertex Architects", "Vortex Architects", "Modern Architecture", "Industrial Design", "Residential Architecture", "Enugu Architects", "Lagos Architects", "Architect near me", "Nigerian Architects"],
     authors: [{ name: "Vartex Studio" }],
