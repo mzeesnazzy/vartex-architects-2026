@@ -42,10 +42,20 @@ To make your profile look premium and professional, please provide:
 
 ---
 
-## Why This Matters
-When someone in Nigeria searches for **"Top Architect Lagos"** or **"Vertex Architects Enugu"**, Google looks at three things:
-1.  **Proximity**: How close you are to them.
-2.  **Relevance**: How well your GMB profile matches their search (our job to optimize).
-3.  **Prominence**: Your reviews and photos (your job to generate).
+---
+
+## Phase 4: Advanced Ranking Strategies (The "Map Pack" Secret)
+Setting up the profile gets you *on* the map. These steps get you to **#1**:
+
+1.  **Google Posts**: Think of this as a mini-blog on your Google listing. We can post photos of your new project sketches or construction site visits every 7 days. This tells Google you are active.
+2.  **NAP Consistency**: Your **N**ame, **A**ddress, and **P**hone must be *identical* everywhere (Website, GMB, Facebook, Instagram). If one says "St." and the other says "Street," Google gets confused.
+3.  **Q&A Section**: Don't wait for clients to ask questions. We can pre-fill questions like *"Do you offer site consultations in Enugu?"* and answer them ourselves.
+4.  **Service Attributes**: We will add specific tag like "Sustainable Design," "Eco-friendly materials," and "Residential specialist" to help you show up for those specific niche searches.
+5.  **Direct Messaging**: Turning on the "Chat" feature in GMB allows clients to message you directly from Google. This is a huge ranking signal.
+
+---
+
+## 🚀 Final Goal: The "Map Pack"
+By following this comprehensive setup, Vartex Architects will aim for the **Google Map Pack**—the top 3 businesses shown at the very top of Google Search.
 
 By following this guide, we can ensure Vartex Architects is the first firm they see.

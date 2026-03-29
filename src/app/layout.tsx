@@ -23,7 +23,7 @@ export const metadata: Metadata = {
         default: "Vartex Architects | Architecture, Interior Design & 3D Visualization",
         template: "%s | Vartex Architects"
     },
-    description: "Specialized in premium Architecture, Interior Design, and 3D Visualization. Vartex Architects provides photorealistic rendering, sustainable planning, and master-design solutions for residential and commercial projects across Nigeria.",
+    description: "Vartex Architects is a specialized studio focusing on high-end residential, commercial and hospitality projects. We provide a complete design experience from conceptual visualization to architectural execution.",
     metadataBase: new URL("https://vartexarchitects.com"),
     keywords: ["Architecture", "Sustainable Design", "Vartex Architects", "Vertex Architects", "Vortex Architects", "Modern Architecture", "Industrial Design", "Residential Architecture", "Enugu Architects", "Lagos Architects", "Architect near me", "Nigerian Architects"],
     authors: [{ name: "Vartex Studio" }],
