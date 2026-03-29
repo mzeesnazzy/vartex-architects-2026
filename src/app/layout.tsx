@@ -36,7 +36,7 @@ export const metadata: Metadata = {
     },
     openGraph: {
         title: "Vartex Architects | Architecture, Interior Design & 3D Visualization",
-        description: "Specialized in premium Architecture, Interior Design, and 3D Visualization. Vartex Architects provides photorealistic rendering and sustainable planning solutions.",
+        description: "Vartex Architects is a specialized studio focusing on high-end residential, commercial and hospitality projects. We provide a complete design experience.",
         url: 'https://vartexarchitects.com',
         siteName: 'Vartex Architects',
         images: [
@@ -53,7 +53,7 @@ export const metadata: Metadata = {
     twitter: {
         card: "summary_large_image",
         title: "Vartex Architects | Architecture, Interior Design & 3D Visualization",
-        description: "Specialized in premium Architecture, Interior Design, and 3D Visualization. Vartex Architects provides photorealistic rendering and sustainable planning solutions.",
+        description: "Vartex Architects is a specialized studio focusing on high-end residential, commercial and hospitality projects. We provide a complete design experience.",
         images: ["/og-image.jpg"],
     },
     robots: {
